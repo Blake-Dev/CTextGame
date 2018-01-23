@@ -1,0 +1,7 @@
+0,Goblin,2.0,1.0
+1,Skeleton,5.0,3.0
+2,Undead,7.0,3.0
+3,Dragon,18.0,8.0
+4,Giant Spider,5.0,4.0
+5,Bandit,5.0,4.0
+6,Mage,8.0,4.0
