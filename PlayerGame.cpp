@@ -18,8 +18,6 @@ int main()
 	Game game;
 	UIManager UI;
 	
-	game.LoadSave();
-
 	int choice;
 
 	UI.OutputText("Press any key to continue...");

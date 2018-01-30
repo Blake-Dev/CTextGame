@@ -3,7 +3,9 @@
 
 Game::Game()
 {
-	playing = true;
+	//playing = true;
+	LoadSave();
+	MainMenu();
 }
 
 void Game::LoadSave()
@@ -14,9 +16,9 @@ void Game::LoadSave()
 	m_ent[0]->inventory.m_inventory = file.LoadPlayerItems();
 	SetLocation();
 
-	std::cout << "Player loaded..." << std::endl << std::endl;
+	std::cout << "File save detected..." << std::endl << std::endl;
 
-	m_ent[0]->PrintStats();
+	//m_ent[0]->PrintStats();
 
 	//Item * i = new Weapon(100, "Wooden Sword", "A splintering wood sword. Good for smacking.", 2.0, 1);
 	//Item * j = new Weapon(101, "Iron Sword", "A dull looking iron sword. Wouldn't want to get slashed by that.", 4.0, 5);
@@ -131,84 +133,44 @@ void Game::SetLocation()
 	currentLocation = file.LoadLocation(m_ent[0]->ReturnLocation());
 }
 
-//Belongs in LoadSave()
-//if (std::ifstream("player.txt"))
-//{
-//	std::ifstream infile;
-//	infile.open("player.txt");
-//
-//	std::string name;
-//	//std::string h, mh, a, ma, m, mm, man, maxman;
-//	std::string health, maxh, attack, maxa, magic, maxmag, mana, maxmana;
-//
-//	if (!infile)
-//		std::cout << "Error loading file" << std::endl;
-//	else
-//	{
-//		while (std::getline(infile, name, ','))
-//		{
-//			std::getline(infile, health, ',');
-//			std::getline(infile, maxh, ',');
-//			std::getline(infile, attack, ',');
-//			std::getline(infile, maxa, ',');
-//			std::getline(infile, magic, ',');
-//			std::getline(infile, maxmag, ',');
-//			std::getline(infile, mana, ',');
-//			std::getline(infile, maxmana);
-//		}
-//	}
-//
-//	Entity load(name, std::stod(health), std::stod(maxh), std::stod(attack), std::stod(maxa), std::stod(magic), std::stod(maxmag), std::stod(mana), std::stod(maxmana));
-//
-//	std::cout << "Welcome back, " << name << std::endl;
-//	std::cout << "Stats\nHealth: " << load.ReturnHealth() << std::endl << "Attack: " << load.ReturnAttack() << std::endl;
-//	std::cout << "Magic: " << load.ReturnMagic() << std::endl << "Mana: " << load.ReturnMana() << std::endl;
-//}
-//else
-//{
-//	Entity* load[1];
-//	//Entities Class;
-//
-//	std::ofstream outfile;
-//	std::string name;
-//
-//	std::cout << "No save file found. Creating new save now..." << std::endl;
-//	std::cout << "What is your name?" << std::endl << "> ";
-//
-//	std::cin >> name;
-//
-//	outfile.open("player.txt");
-//
-//	std::cout << "Alright, " << name << ", what are you?" << std::endl;
-//	std::cout << "1 - Warrior: Ferocious, brute, and unyielding." << std::endl;
-//	std::cout << "2 - Rogue: Crafty, cunning, and witty." << std::endl;
-//	std::cout << "3 - Wizard: Intelligent, all-knowing, and good and stuff." << std::endl;
-//
-//	HeroIndex index;
-//	std::cin >> index;
-//
-//	switch (index)
-//	{
-//	case HeroKey::Warrior:
-//		load[0] = new Entity(name, 10.0, 10.0, 12.0, 12.0, 3.0, 3.0, 3.0, 3.0);
-//		load[0]->SetClass(HeroKey::Warrior);
-//		break;
-//
-//	case HeroKey::Rogue:
-//		load[0] = new Entity(name, 9.0, 9.0, 8.0, 8.0, 6.0, 6.0, 7.0, 7.0);
-//		load[0]->SetClass(HeroKey::Rogue);
-//		break;
-//
-//	case HeroKey::Wizard:
-//		load[0] = new Entity(name, 9.0, 9.0, 5.0, 5.0, 13.0, 13.0, 12.0, 12.0);
-//		load[0]->SetClass(HeroKey::Wizard);
-//		break;
-//	}
-//
-//	//std::cout << "Stats" << std::endl << "Name: " << load.ReturnName() << std::endl << "Health: " << load.ReturnHealth() << std::endl << "Attack: " << load.ReturnAttack() << std::endl;
-//
-//	outfile << load[0]->ReturnName() << ',' << load[0]->ReturnHealth() << ',' << load[0]->ReturnMaxHealth() << ','
-//		<< load[0]->ReturnAttack() << ',' << load[0]->ReturnMaxAttack() << ',' << load[0]->ReturnMagic() << ','
-//		<< load[0]->ReturnMaxMagic() << ',' << load[0]->ReturnMana() << ',' << load[0]->ReturnMaxMana();
-//	std::cout << "File written to." << std::endl;
-//}
+void Game::MainMenu()
+{
+	// Menu seen by user when game first starts
+
+	int input;
+	bool done = false;
+	std::cout << "Main Menu\n---------\n1. Play Game\n2. New Game\n3. Game Stats" << std::endl;
+	std::cin >> input;
+
+	while (!done)
+	{
+		switch (input)
+		{
+		case 1:
+			std::cout << "Starting game..." << std::endl;
+			done = true;
+			break;
+		case 2:
+			char newGame;
+			std::cout << "Create a new game save?\n\nAll previous data will be lost\n(y/n) ";
+			std::cin >> newGame;
+			if (toupper(newGame) == 'Y')
+			{
+				//create a new game
+				FileLoader file;
+
+				m_ent.push_back(file.CreateSave());
+				m_ent[0]->inventory.m_inventory = file.LoadPlayerItems();
+				SetLocation();
+				done = true;
+			}
+			break;
+		case 3:
+			std::cout << "Game Stats go here." << std::endl;
+			break;
+		default:
+			std::cout << "Incorrect input" << std::endl;
+			break;
+		}
+	}
+}

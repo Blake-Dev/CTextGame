@@ -150,57 +150,7 @@ Entity* FileLoader::LoadSave()
 	}
 	else
 	{
-		std::ofstream outfile;
-		std::string name;
-
-		std::cout << "No save file found. Creating new save now..." << std::endl;
-		std::cout << "What is your name?" << std::endl << "> ";
-
-		std::cin >> name;
-
-		outfile.open("PlayerSave.txt");
-
-		std::cout << "Alright, " << name << ", what are you?" << std::endl;
-		std::cout << "1 - Warrior: Ferocious, brute, and unyielding." << std::endl;
-		std::cout << "2 - Rogue: Crafty, cunning, and witty." << std::endl;
-		std::cout << "3 - Wizard: Intelligent, all-knowing, and good and stuff." << std::endl;
-
-		HeroIndex index;
-		HeroIndex saveIndex;
-		std::cin >> index;
-
-		switch (index)
-		{
-		case HeroKey::Warrior:
-		{
-			Entity *hero = new Warrior(name, 10.0, 10.0, 12.0, 12.0, 3.0, 3.0, 3.0, 3.0);
-			m_ent.push_back(hero);
-			saveIndex = HeroKey::Warrior;
-		}
-			break;
-
-		case HeroKey::Rogue:
-		{
-			Entity *hero = new Rogue(name, 9.0, 9.0, 8.0, 8.0, 6.0, 6.0, 7.0, 7.0);
-			m_ent.push_back(hero);
-			saveIndex = HeroKey::Rogue;
-		}
-			break;
-
-		case HeroKey::Wizard:
-		{
-			Entity *hero = new Wizard(name, 9.0, 9.0, 5.0, 5.0, 13.0, 13.0, 12.0, 12.0);
-			m_ent.push_back(hero);
-			saveIndex = HeroKey::Wizard;
-		}
-			break;
-		default:
-			break;
-		}
-
-		outfile << saveIndex << ',' << name;
-		
-		std::cout << "File written to." << std::endl;
+		CreateSave();
 	}
 	return m_ent[0];
 }
@@ -313,4 +263,61 @@ Enemy FileLoader::CreateEnemy(int id)
 
 		return e;
 	}
+}
+
+Entity* FileLoader::CreateSave()
+{
+	std::ofstream outfile;
+	std::string name;
+
+	std::cout << "Creating new save now..." << std::endl;
+	std::cout << "What is your name?" << std::endl << "> ";
+
+	std::cin >> name;
+
+	outfile.open("PlayerSave.txt");
+
+	std::cout << "Alright, " << name << ", what are you?" << std::endl;
+	std::cout << "1 - Warrior: Ferocious, brute, and unyielding." << std::endl;
+	std::cout << "2 - Rogue: Crafty, cunning, and witty." << std::endl;
+	std::cout << "3 - Wizard: Intelligent, all-knowing, and good and stuff." << std::endl;
+
+	HeroIndex index;
+	HeroIndex saveIndex;
+	std::cin >> index;
+
+	switch (index)
+	{
+	case HeroKey::Warrior:
+	{
+		Entity *hero = new Warrior(name, 10.0, 10.0, 12.0, 12.0, 3.0, 3.0, 3.0, 3.0);
+		m_ent.push_back(hero);
+		saveIndex = HeroKey::Warrior;
+	}
+	break;
+
+	case HeroKey::Rogue:
+	{
+		Entity *hero = new Rogue(name, 9.0, 9.0, 8.0, 8.0, 6.0, 6.0, 7.0, 7.0);
+		m_ent.push_back(hero);
+		saveIndex = HeroKey::Rogue;
+	}
+	break;
+
+	case HeroKey::Wizard:
+	{
+		Entity *hero = new Wizard(name, 9.0, 9.0, 5.0, 5.0, 13.0, 13.0, 12.0, 12.0);
+		m_ent.push_back(hero);
+		saveIndex = HeroKey::Wizard;
+	}
+	break;
+	default:
+		break;
+	}
+
+	outfile << saveIndex << ',' << name;
+
+	std::cout << "File written to." << std::endl;
+
+	return m_ent[0];
 }

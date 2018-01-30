@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <cctype>
 #include "Entity.h"
 #include "HeroDef.h"
 #include "FileLoader.h"
@@ -20,6 +21,7 @@ public:
 	int CheckPlayerState();
 	void ProcessInput(int state, int choice);
 	void SetLocation();
+	void MainMenu();
 
 	std::vector<Entity*> m_ent;
 	Location currentLocation;

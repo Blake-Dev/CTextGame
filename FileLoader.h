@@ -19,6 +19,7 @@ public:
 
 	std::vector<Item*> LoadPlayerItems();
 	Entity* LoadSave();
+	Entity* CreateSave();
 	Item* CreateObject(int id);
 	Location LoadLocation(int id);
 	Enemy CreateEnemy(int id);
