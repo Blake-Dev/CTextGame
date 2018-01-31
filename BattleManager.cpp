@@ -72,11 +72,11 @@ void BattleManager::PrintEnemies()
 	{
 		for (int i = 0; i < enemies.size(); i++)
 		{
-			std::cout << "Name: " << enemies[i].name << std::endl;
-			std::cout << "Attack: " << enemies[i].attack << std::endl;
-			std::cout << "Health: " << enemies[i].health << std::endl;
-			std::cout << "Magic: " << enemies[i].magic << std::endl;
-			std::cout << "Mana: " << enemies[i].mana << std::endl << std::endl;
+			std::cout << enemies[i].name << std::endl;
+			std::cout << "ATK " << enemies[i].attack;
+			std::cout << " - HP " << enemies[i].health << std::endl;
+			/*std::cout << "Magic: " << enemies[i].magic << std::endl;
+			std::cout << "Mana: " << enemies[i].mana << std::endl << std::endl;*/
 		}
 	}
 	else
@@ -94,16 +94,27 @@ void BattleManager::Battle(Entity * player, int locationID)
 
 	if (enemies.size() > 0)
 	{
+		if (enemies.size() == 1)
+		{
+			ui.OutputText("As you push through the clearing into the next room\nyou see a lone enemy unaware of your presence.\n");
+			PrintEnemies();
+		}
+		else
+		{
+			ui.OutputText("Multiple enemies stand between you and the exit...\n\n");
+			PrintEnemies();
+		}
+		_getch();
+		system("cls");
 		int choice;
-		ui.OutputText("Prepare for battle!\n");
-		PrintEnemies();
 
 		battling = true;
 		while (battling)
 		{
-			EnemiesFormatted();
+			std::cout << player->ReturnName() << "\nHP " << player->ReturnHealth() << " - ATK " << player->ReturnAttack() << std::endl << std::endl;
+			PrintEnemies();
+			//EnemiesFormatted();
 			ui.OutputText("\n");
-			std::cout << "Player - Health | " << player->ReturnHealth() << " - Attack | " << player->ReturnAttack() << std::endl;
 			ui.BattleMenu();
 			std::cout << "> ";
 			std::cin >> choice;
