@@ -18,23 +18,10 @@ void Game::LoadSave()
 	m_ent[0]->inventory.m_inventory = file.LoadPlayerItems();
 	SetLocation();
 
-	//m_ent[0]->PrintStats();
-
-	//Item * i = new Weapon(100, "Wooden Sword", "A splintering wood sword. Good for smacking.", 2.0, 1);
-	//Item * j = new Weapon(101, "Iron Sword", "A dull looking iron sword. Wouldn't want to get slashed by that.", 4.0, 5);
-	//m_ent[0]->inventory.AddItem(i);
-	//m_ent[0]->inventory.AddItem(j);
-	//
-
-	//
 	//m_ent[0]->inventory.AddItem(file.CreateObject(208));
 	////m_ent[0]->inventory.ShowAllItems();
 	
 	//Save();
-	
-	/*
-	std::cout << currentLocation.name << std::endl << currentLocation.description << std::endl;
-	*/
 }
 
 void Game::Save()
@@ -78,7 +65,7 @@ void Game::ProcessInput(int state, int choice)
 			break;
 		case 2:
 			//Inventory
-			m_ent[0]->inventory.ShowAllItems();
+			m_ent[0]->inventory.ShowAllItemsClean();
 			break;
 		case 3:
 			//Rest
@@ -139,11 +126,12 @@ void Game::MainMenu()
 
 	int input;
 	bool done = false;
-	std::cout << "Main Menu\n---------\n1. Play Game\n2. New Game\n3. Game Stats" << std::endl;
-	std::cin >> input;
+	std::cout << "Main Menu\n---------\n1. Play Game\n2. New Game\n3. Game Stats\n";
 
 	while (!done)
 	{
+		std::cout << "> ";
+		std::cin >> input;
 		switch (input)
 		{
 		case 1:

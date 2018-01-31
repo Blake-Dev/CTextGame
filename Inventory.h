@@ -13,6 +13,7 @@ public:
 	void AddItem(Item * i);
 	void DeleteItem();
 	void ShowAllItems();
+	void ShowAllItemsClean();
 	void EquipShowItems();
 	int ReturnSize();
 

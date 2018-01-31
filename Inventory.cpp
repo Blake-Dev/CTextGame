@@ -55,6 +55,36 @@ void Inventory::ShowAllItems()
 	}
 }
 
+void Inventory::ShowAllItemsClean()
+{
+	if (m_inventory.size() <= 0)
+		std::cout << "There are currently no items in your inventory!" << std::endl;
+	else
+	{
+		for (unsigned int i = 0; i < m_inventory.size(); i++)
+		{
+			if (m_inventory[i]->item_type == "Consumable")
+			{
+				printf("%s +%.2f <FX>\n", m_inventory[i]->ReturnName().c_str(), m_inventory[i]->ReturnStat());
+			}
+			else if (m_inventory[i]->item_type == "Weapon")
+			{
+				printf("%s +%.2f <ATK>\n", m_inventory[i]->ReturnName().c_str(), m_inventory[i]->ReturnStat());
+			}
+			else if (m_inventory[i]->item_type == "Armor")
+			{
+				printf("%s +%.2f <DEF>\n", m_inventory[i]->ReturnName().c_str(), m_inventory[i]->ReturnStat());
+			}
+			else
+			{
+				printf("%s <VAL> %d\n", m_inventory[i]->ReturnName().c_str(), m_inventory[i]->ReturnValue());
+			}
+			if(i < m_inventory.size() - 1)
+				std::cout << "//" << std::endl;
+		}
+	}
+}
+
 void Inventory::EquipShowItems()
 {
 	if (m_inventory.size() <= 0)

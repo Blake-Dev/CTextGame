@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <cctype>
+#include <conio.h>
 #include "Entity.h"
 #include "HeroDef.h"
 #include "FileLoader.h"
