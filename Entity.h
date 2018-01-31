@@ -38,6 +38,9 @@ public:
 	void Travel();
 	void ResetStats();
 	void ReturnHome();
+	void IncrementDungeonLevel();
+	void SetDungeonLevel(int lvl);
+	int ReturnDungeonLevel();
 
 	void AddGold(int g);
 	void RemoveGold(int g);
@@ -55,7 +58,7 @@ protected:
 	std::string name, classType;
 	double health, max_health, attack, max_attack, magic, max_magic, mana, max_mana;
 	double defense = 0;
-	int ID;
+	int ID, currentDungeonLevel;
 	int gold = 0;
 	int state = States::Idle;
 	int location = Locations::Home;

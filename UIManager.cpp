@@ -18,7 +18,7 @@ void UIManager::Options()
 
 void UIManager::Menu(int location, const std::string & l)
 {
-	std::cout << "Location: " << l << std::endl;
+	std::cout << "Location // " << l << std::endl;
 	std::cout << std::setfill('=') << std::setw(30) << '=' << std::setfill(' ') << std::endl;
 	switch (location)
 	{

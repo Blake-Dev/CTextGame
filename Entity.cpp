@@ -134,12 +134,14 @@ void Entity::Travel()
 
 	if (location == Locations::Home)
 	{
+		ui.OutputText("Travel // Location - Home");
+		ui.OutputText("=========================");
 		ui.OutputText("1 - Small Dungeon");
 		ui.OutputText("2 - Large Dungeon");
 		ui.OutputText("3 - Abyss");
 		ui.OutputText("4 - Stay Put");
 
-		std::cout << "Travel to where?" << std::endl << "> ";
+		std::cout << "> ";
 		std::cin >> choice;
 
 		switch (choice)
@@ -147,14 +149,17 @@ void Entity::Travel()
 		case 1:
 			ui.OutputText("You make the trek to the Small Dungeon.");
 			location = Locations::SmallDungeon;
+			SetDungeonLevel(0);
 			break;
 		case 2:
 			ui.OutputText("You make the trek to the Large Dungeon.");
 			location = Locations::LargeDungeon;
+			SetDungeonLevel(0);
 			break;
 		case 3:
 			ui.OutputText("You make the trek to the Abyss...");
 			location = Locations::Abyss;
+			SetDungeonLevel(0);
 			break;
 		case 4:
 			ui.OutputText("You decide to stay home. You'll be ready soon enough");
@@ -167,18 +172,29 @@ void Entity::Travel()
 	}
 	else
 	{
-		ui.OutputText("Travel to next room?\n1 - Yes | 2 - No");
+		std::cout << "Travel // Location - Level " << ReturnDungeonLevel() << std::endl;
+		ui.OutputText("=============================");
+		ui.OutputText("Advance to next room?\n\n1 - Yes\n2 - No");
 		std::cout << "> ";
 		std::cin >> choice;
 		if (choice == 1)
 		{
 			ui.OutputText("You press forward...");
+			IncrementDungeonLevel();
+
+			if (ReturnDungeonLevel() >= 10)
+			{
+				state == States::Idle;
+				location = Locations::Home;
+				ui.OutputText("You clear the dungeon triumphantly!");
+			}
+
 			state = States::Battle;
 		}
 		else
 		{
 			ui.OutputText("You stay and collect yourself.");
-			state = States::Battle;
+			state = States::Idle;
 		}
 	}	
 }
@@ -213,6 +229,21 @@ void Entity::ReturnHome()
 	}
 	else
 		ui.OutputText("Let them come.");
+}
+
+void Entity::IncrementDungeonLevel()
+{
+	currentDungeonLevel++;
+	if (currentDungeonLevel > 10)
+		currentDungeonLevel = 10;
+}
+void Entity::SetDungeonLevel(int lvl)
+{
+	currentDungeonLevel = lvl;
+}
+int Entity::ReturnDungeonLevel()
+{
+	return currentDungeonLevel;
 }
 
 void Entity::AddGold(int g)
@@ -314,147 +345,156 @@ void Entity::Equip()
 	inventory.EquipShowItems();
 
 	std::cin >> choice;
-	armorSlot = inventory.m_inventory[choice]->ReturnEquippedSlot();
-	//std::cout << "armorSlot: " << armorSlot << std::endl;
 
-	switch (armorSlot)
+	if ((choice < inventory.m_inventory.size()) && (choice > -1))
 	{
-	case ArmorID::NotArmor:
-		if (currentlyEquipped[ArmorID::NotArmor] == NULL)
-		{
-			currentlyEquipped[ArmorID::NotArmor] = inventory.m_inventory[choice];
 
-			attack += currentlyEquipped[ArmorID::NotArmor]->ReturnStat();
+		armorSlot = inventory.m_inventory[choice]->ReturnEquippedSlot();
+		//std::cout << "armorSlot: " << armorSlot << std::endl;
 
-			inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
-			std::cout << currentlyEquipped[ArmorID::NotArmor]->ReturnName() << " has been equipped." << std::endl;
-		}
-		else
+		switch (armorSlot)
 		{
-			std::cout << currentlyEquipped[ArmorID::NotArmor]->ReturnName() << " has been unequipped." << std::endl;
-			attack -= currentlyEquipped[ArmorID::NotArmor]->ReturnStat();
-			inventory.m_inventory.push_back(currentlyEquipped[ArmorID::NotArmor]);
-			currentlyEquipped[ArmorID::NotArmor] = inventory.m_inventory[choice];
-			inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
-			//Add and subtract stat values from player
-			
-			attack += currentlyEquipped[ArmorID::NotArmor]->ReturnStat();
-			std::cout << currentlyEquipped[ArmorID::NotArmor]->ReturnName() << " has been equipped." << std::endl;
-		}
-		break;
-	case ArmorID::Head:
-		if (currentlyEquipped[ArmorID::Head] == NULL)
-		{
-			currentlyEquipped[ArmorID::Head] = inventory.m_inventory[choice];
+		case ArmorID::NotArmor:
+			if (currentlyEquipped[ArmorID::NotArmor] == NULL)
+			{
+				currentlyEquipped[ArmorID::NotArmor] = inventory.m_inventory[choice];
 
-			defense += currentlyEquipped[ArmorID::Head]->ReturnStat();;
+				attack += currentlyEquipped[ArmorID::NotArmor]->ReturnStat();
 
-			inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
-			std::cout << currentlyEquipped[ArmorID::Head]->ReturnName() << " has been equipped." << std::endl;
-		}
-		else
-		{
-			std::cout << currentlyEquipped[ArmorID::Head]->ReturnName() << " has been unequipped." << std::endl;
-			defense -= currentlyEquipped[ArmorID::Head]->ReturnStat();
-			inventory.m_inventory.push_back(currentlyEquipped[ArmorID::Head]);
-			currentlyEquipped[ArmorID::Head] = inventory.m_inventory[choice];
-			inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
-			
-			defense += currentlyEquipped[ArmorID::Head]->ReturnStat();
-			std::cout << currentlyEquipped[ArmorID::Head]->ReturnName() << " has been equipped." << std::endl;
-		}
-		break;
-	case ArmorID::Arms:
-		if (currentlyEquipped[ArmorID::Arms] == NULL)
-		{
-			currentlyEquipped[ArmorID::Arms] = inventory.m_inventory[choice];
-			inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
+				inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
+				std::cout << currentlyEquipped[ArmorID::NotArmor]->ReturnName() << " has been equipped." << std::endl;
+			}
+			else
+			{
+				std::cout << currentlyEquipped[ArmorID::NotArmor]->ReturnName() << " has been unequipped." << std::endl;
+				attack -= currentlyEquipped[ArmorID::NotArmor]->ReturnStat();
+				inventory.m_inventory.push_back(currentlyEquipped[ArmorID::NotArmor]);
+				currentlyEquipped[ArmorID::NotArmor] = inventory.m_inventory[choice];
+				inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
+				//Add and subtract stat values from player
 
-			defense += currentlyEquipped[ArmorID::Arms]->ReturnStat();
+				attack += currentlyEquipped[ArmorID::NotArmor]->ReturnStat();
+				std::cout << currentlyEquipped[ArmorID::NotArmor]->ReturnName() << " has been equipped." << std::endl;
+			}
+			break;
+		case ArmorID::Head:
+			if (currentlyEquipped[ArmorID::Head] == NULL)
+			{
+				currentlyEquipped[ArmorID::Head] = inventory.m_inventory[choice];
 
-			std::cout << currentlyEquipped[ArmorID::Arms]->ReturnName() << " has been equipped." << std::endl;
-		}
-		else
-		{
-			std::cout << currentlyEquipped[ArmorID::Arms]->ReturnName() << " has been unequipped." << std::endl;
-			defense -= currentlyEquipped[ArmorID::Arms]->ReturnStat();
-			inventory.m_inventory.push_back(currentlyEquipped[ArmorID::Arms]);
-			currentlyEquipped[ArmorID::Arms] = inventory.m_inventory[choice];
-			inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
-			
-			defense += currentlyEquipped[ArmorID::Arms]->ReturnStat();
-			std::cout << currentlyEquipped[ArmorID::Arms]->ReturnName() << " has been equipped." << std::endl;
-		}
-		break;
-	case ArmorID::Chest:
-		if (currentlyEquipped[ArmorID::Chest] == NULL)
-		{
-			currentlyEquipped[ArmorID::Chest] = inventory.m_inventory[choice];
-			inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
+				defense += currentlyEquipped[ArmorID::Head]->ReturnStat();;
 
-			defense += currentlyEquipped[ArmorID::Chest]->ReturnStat();
+				inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
+				std::cout << currentlyEquipped[ArmorID::Head]->ReturnName() << " has been equipped." << std::endl;
+			}
+			else
+			{
+				std::cout << currentlyEquipped[ArmorID::Head]->ReturnName() << " has been unequipped." << std::endl;
+				defense -= currentlyEquipped[ArmorID::Head]->ReturnStat();
+				inventory.m_inventory.push_back(currentlyEquipped[ArmorID::Head]);
+				currentlyEquipped[ArmorID::Head] = inventory.m_inventory[choice];
+				inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
 
-			std::cout << currentlyEquipped[ArmorID::Chest]->ReturnName() << " has been equipped." << std::endl;
-		}
-		else
-		{
-			std::cout << currentlyEquipped[ArmorID::Chest]->ReturnName() << " has been unequipped." << std::endl;
-			defense -= currentlyEquipped[ArmorID::Chest]->ReturnStat();
-			inventory.m_inventory.push_back(currentlyEquipped[ArmorID::Chest]);
-			currentlyEquipped[ArmorID::Chest] = inventory.m_inventory[choice];
-			inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
-			
-			defense += currentlyEquipped[ArmorID::Chest]->ReturnStat();
-			std::cout << currentlyEquipped[ArmorID::Chest]->ReturnName() << " has been equipped." << std::endl;
-		}
-		break;
-	case ArmorID::Legs:
-		if (currentlyEquipped[ArmorID::Legs] == NULL)
-		{
-			currentlyEquipped[ArmorID::Legs] = inventory.m_inventory[choice];
-			inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
+				defense += currentlyEquipped[ArmorID::Head]->ReturnStat();
+				std::cout << currentlyEquipped[ArmorID::Head]->ReturnName() << " has been equipped." << std::endl;
+			}
+			break;
+		case ArmorID::Arms:
+			if (currentlyEquipped[ArmorID::Arms] == NULL)
+			{
+				currentlyEquipped[ArmorID::Arms] = inventory.m_inventory[choice];
+				inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
 
-			defense += currentlyEquipped[ArmorID::Legs]->ReturnStat();
+				defense += currentlyEquipped[ArmorID::Arms]->ReturnStat();
 
-			std::cout << currentlyEquipped[ArmorID::Legs]->ReturnName() << " has been equipped." << std::endl;
-		}
-		else
-		{
-			std::cout << currentlyEquipped[ArmorID::Legs]->ReturnName() << " has been unequipped." << std::endl;
-			defense -= currentlyEquipped[ArmorID::Legs]->ReturnStat();
-			inventory.m_inventory.push_back(currentlyEquipped[ArmorID::Legs]);
-			currentlyEquipped[ArmorID::Legs] = inventory.m_inventory[choice];
-			inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
-			
-			defense += currentlyEquipped[ArmorID::Legs]->ReturnStat();
-			std::cout << currentlyEquipped[ArmorID::Legs]->ReturnName() << " has been equipped." << std::endl;
-		}
-		break;
-	case ArmorID::Shield:
-		if (currentlyEquipped[ArmorID::Shield] == NULL)
-		{
-			currentlyEquipped[ArmorID::Shield] = inventory.m_inventory[choice];
-			inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
+				std::cout << currentlyEquipped[ArmorID::Arms]->ReturnName() << " has been equipped." << std::endl;
+			}
+			else
+			{
+				std::cout << currentlyEquipped[ArmorID::Arms]->ReturnName() << " has been unequipped." << std::endl;
+				defense -= currentlyEquipped[ArmorID::Arms]->ReturnStat();
+				inventory.m_inventory.push_back(currentlyEquipped[ArmorID::Arms]);
+				currentlyEquipped[ArmorID::Arms] = inventory.m_inventory[choice];
+				inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
 
-			defense += currentlyEquipped[ArmorID::Shield]->ReturnStat();
+				defense += currentlyEquipped[ArmorID::Arms]->ReturnStat();
+				std::cout << currentlyEquipped[ArmorID::Arms]->ReturnName() << " has been equipped." << std::endl;
+			}
+			break;
+		case ArmorID::Chest:
+			if (currentlyEquipped[ArmorID::Chest] == NULL)
+			{
+				currentlyEquipped[ArmorID::Chest] = inventory.m_inventory[choice];
+				inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
 
-			std::cout << currentlyEquipped[ArmorID::Shield]->ReturnName() << " has been equipped." << std::endl;
+				defense += currentlyEquipped[ArmorID::Chest]->ReturnStat();
+
+				std::cout << currentlyEquipped[ArmorID::Chest]->ReturnName() << " has been equipped." << std::endl;
+			}
+			else
+			{
+				std::cout << currentlyEquipped[ArmorID::Chest]->ReturnName() << " has been unequipped." << std::endl;
+				defense -= currentlyEquipped[ArmorID::Chest]->ReturnStat();
+				inventory.m_inventory.push_back(currentlyEquipped[ArmorID::Chest]);
+				currentlyEquipped[ArmorID::Chest] = inventory.m_inventory[choice];
+				inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
+
+				defense += currentlyEquipped[ArmorID::Chest]->ReturnStat();
+				std::cout << currentlyEquipped[ArmorID::Chest]->ReturnName() << " has been equipped." << std::endl;
+			}
+			break;
+		case ArmorID::Legs:
+			if (currentlyEquipped[ArmorID::Legs] == NULL)
+			{
+				currentlyEquipped[ArmorID::Legs] = inventory.m_inventory[choice];
+				inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
+
+				defense += currentlyEquipped[ArmorID::Legs]->ReturnStat();
+
+				std::cout << currentlyEquipped[ArmorID::Legs]->ReturnName() << " has been equipped." << std::endl;
+			}
+			else
+			{
+				std::cout << currentlyEquipped[ArmorID::Legs]->ReturnName() << " has been unequipped." << std::endl;
+				defense -= currentlyEquipped[ArmorID::Legs]->ReturnStat();
+				inventory.m_inventory.push_back(currentlyEquipped[ArmorID::Legs]);
+				currentlyEquipped[ArmorID::Legs] = inventory.m_inventory[choice];
+				inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
+
+				defense += currentlyEquipped[ArmorID::Legs]->ReturnStat();
+				std::cout << currentlyEquipped[ArmorID::Legs]->ReturnName() << " has been equipped." << std::endl;
+			}
+			break;
+		case ArmorID::Shield:
+			if (currentlyEquipped[ArmorID::Shield] == NULL)
+			{
+				currentlyEquipped[ArmorID::Shield] = inventory.m_inventory[choice];
+				inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
+
+				defense += currentlyEquipped[ArmorID::Shield]->ReturnStat();
+
+				std::cout << currentlyEquipped[ArmorID::Shield]->ReturnName() << " has been equipped." << std::endl;
+			}
+			else
+			{
+				std::cout << currentlyEquipped[ArmorID::Shield]->ReturnName() << " has been unequipped." << std::endl;
+				defense -= currentlyEquipped[ArmorID::Shield]->ReturnStat();
+				inventory.m_inventory.push_back(currentlyEquipped[ArmorID::Shield]);
+				currentlyEquipped[ArmorID::Shield] = inventory.m_inventory[choice];
+				inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
+
+				defense += currentlyEquipped[ArmorID::Shield]->ReturnStat();
+				std::cout << currentlyEquipped[ArmorID::Shield]->ReturnName() << " has been equipped." << std::endl;
+			}
+			break;
+		default:
+			std::cout << "Whoopsies" << std::endl;
+			break;
 		}
-		else
-		{
-			std::cout << currentlyEquipped[ArmorID::Shield]->ReturnName() << " has been unequipped." << std::endl;
-			defense -= currentlyEquipped[ArmorID::Shield]->ReturnStat();
-			inventory.m_inventory.push_back(currentlyEquipped[ArmorID::Shield]);
-			currentlyEquipped[ArmorID::Shield] = inventory.m_inventory[choice];
-			inventory.m_inventory.erase(inventory.m_inventory.begin() + choice);
-			
-			defense += currentlyEquipped[ArmorID::Shield]->ReturnStat();
-			std::cout << currentlyEquipped[ArmorID::Shield]->ReturnName() << " has been equipped." << std::endl;
-		}
-		break;
-	default:
-		std::cout << "Whoopsies" << std::endl;
-		break;
+	}
+	else
+	{
+		std::cout << "You did not choose a valid value." << std::endl;
 	}
 }
 
