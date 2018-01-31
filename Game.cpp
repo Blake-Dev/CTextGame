@@ -151,15 +151,23 @@ void Game::MainMenu()
 			done = true;
 			break;
 		case 2:
+			system("cls");
 			char newGame;
 			std::cout << "Create a new game save?\n\nAll previous data will be lost\n(y/n) ";
 			std::cin >> newGame;
 			if (toupper(newGame) == 'Y')
 			{
+				system("cls");
 				//create a new game
 				FileLoader file;
 
-				m_ent.push_back(file.CreateSave());
+				//If a player exists, go ahead and reassign it to a new player.
+				if (m_ent.size() > 0)
+					m_ent[0] = file.CreateSave();
+				else //Otherwise the vector is empty, so push back the first item
+					m_ent.push_back(file.CreateSave());
+
+				//Set the player inventory
 				m_ent[0]->inventory.m_inventory = file.LoadPlayerItems();
 				SetLocation();
 				done = true;

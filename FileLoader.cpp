@@ -275,6 +275,8 @@ Entity* FileLoader::CreateSave()
 
 	std::cin >> name;
 
+	system("cls");
+
 	outfile.open("PlayerSave.txt");
 
 	std::cout << "Alright, " << name << ", what are you?" << std::endl;
