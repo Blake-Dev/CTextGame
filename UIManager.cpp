@@ -36,10 +36,10 @@ void UIManager::Menu(int location, const std::string & l)
 
 void UIManager::BattleMenu()
 {
-	std::cout << std::setfill('=') << std::setw(30) << '=' << std::setfill(' ') << std::endl;
-	std::cout << std::left << std::setw(4) << "1 - " << std::setw(10) << std::right << "Attack " << std::setw(2) << "| " << std::setw(4) << std::left << "2 - " << std::setw(10) << std::right << "Defend" << std::endl;
-	std::cout << std::left << std::setw(4) << "3 - " << std::setw(10) << std::right << "Heal " << std::setw(2) << "| " << std::setw(4) << std::left << "4 - " << std::setw(10) << std::right << "Use Item" << std::endl;
-	std::cout << std::setfill('=') << std::setw(30) << '=' << std::setfill(' ') << std::endl;
+	std::cout << std::setfill('*') << std::setw(25) << '*' << std::setfill(' ') << std::endl;
+	std::cout << std::left << std::setw(2) << "1." << std::setw(8) << std::right << "Attack" << std::setw(4) << " | " << std::setw(2) << std::left << "2." << std::setw(8) << std::right << "Defend" << std::endl;
+	std::cout << std::left << std::setw(2) << "3." << std::setw(8) << std::right << "Heal" << std::setw(4) << " | " << std::setw(2) << std::left << "4." << std::setw(8) << std::right << "Item" << std::endl;
+	std::cout << std::setfill('*') << std::setw(25) << '*' << std::setfill(' ') << std::endl;
 }
 
 void UIManager::Clear()

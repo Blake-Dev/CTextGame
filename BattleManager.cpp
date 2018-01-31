@@ -72,9 +72,7 @@ void BattleManager::PrintEnemies()
 	{
 		for (int i = 0; i < enemies.size(); i++)
 		{
-			std::cout << enemies[i].name << std::endl;
-			std::cout << "ATK " << enemies[i].attack;
-			std::cout << " - HP " << enemies[i].health << std::endl;
+			std::cout << enemies[i].name << " // ATK " << enemies[i].attack << "   HP " << enemies[i].health << std::endl;
 			/*std::cout << "Magic: " << enemies[i].magic << std::endl;
 			std::cout << "Mana: " << enemies[i].mana << std::endl << std::endl;*/
 		}
@@ -111,76 +109,83 @@ void BattleManager::Battle(Entity * player, int locationID)
 		battling = true;
 		while (battling)
 		{
-			std::cout << player->ReturnName() << "\nHP " << player->ReturnHealth() << " - ATK " << player->ReturnAttack() << std::endl << std::endl;
-			PrintEnemies();
-			//EnemiesFormatted();
-			ui.OutputText("\n");
+			std::cout << player->ReturnName() << " // " << "ATK " << player->ReturnAttack() << "   HP " << player->ReturnHealth() << std::endl;
 			ui.BattleMenu();
-			std::cout << "> ";
+			std::cout << "\n -------\n<ENEMIES>\n -------\n" << std::endl;
+			PrintEnemies();
+			
+			std::cout << "\n" << "> ";
 			std::cin >> choice;
-
-			switch (choice)
-			{
-			case 1:
-				//Attack
-				int attackChoice;
-				EnemiesToAttack();
-				std::cout << "> ";
-				std::cin >> attackChoice;
-
-				if (enemies[attackChoice].health > 0.0)
-				{
-					std::cout << "You attack the " << enemies[attackChoice].name << " for " << player->ReturnAttack() << " damage!" << std::endl;
-					enemies[attackChoice].health -= player->ReturnAttack();
-					if (enemies[attackChoice].health <= 0.0)
-						ui.OutputText("You have slain the enemy!");
-				}
-				else
-					ui.OutputText("You can't attack something that's dead!");
-	
-				break;
-			case 2:
-				//Defend
-				ui.OutputText("You defend and stuff and things!");
-				break;
-			case 3:
-				//Heal
-				player->Heal();
-				break;
-			case 4:
-				//Use Item
-				ui.OutputText("Coming Soon");
-				break;
-			default:
-				std::cout << "Choice out of range!" << std::endl;
-				break;
-			}
-			EnemiesAttackPlayer(player);
-			player->RechargeMana();
+			ui.Clear();
 
 			if ((!EnemiesAlive()) || (player->ReturnHealth() <= 0))
 			{
 				battling = false;
 				player->SetState(States::Idle);
 			}
+			else
+			{
+				switch (choice)
+				{
+				case 1:
+					//Attack
+					int attackChoice;
+					EnemiesToAttack(player);
+					std::cout << "\n" << "> ";
+					std::cin >> attackChoice;
+
+					if (enemies[attackChoice].health > 0.0)
+					{
+						std::cout << "You attack the " << enemies[attackChoice].name << " for " << player->ReturnAttack() << " damage!" << std::endl;
+						enemies[attackChoice].health -= player->ReturnAttack();
+						if (enemies[attackChoice].health <= 0.0)
+							ui.OutputText("You have slain the enemy!");
+					}
+					else
+						ui.OutputText("You can't attack something that's dead!");
+
+					break;
+				case 2:
+					//Defend
+					ui.OutputText("You defend and stuff and things!");
+					break;
+				case 3:
+					//Heal
+					player->Heal();
+					break;
+				case 4:
+					//Use Item
+					ui.OutputText("Coming Soon");
+					break;
+				default:
+					std::cout << "Choice out of range!" << std::endl;
+					break;
+				}
+				EnemiesAttackPlayer(player);
+				ui.OutputText("\n");
+				player->RechargeMana();
+			}
 		}
 	}
 
 }
 
-void BattleManager::EnemiesToAttack()
+void BattleManager::EnemiesToAttack(Entity * player)
 {
+	std::cout << player->ReturnName() << " // " << "ATK " << player->ReturnAttack() << "   HP " << player->ReturnHealth() << std::endl << std::endl;
+	std::cout << "---------------------------\nSelect an enemy to attack:\n---------------------------" << std::endl << std::endl;
+
 	if (enemies.size() > 0)
 	{
 		for (int i = 0; i < enemies.size(); i++)
 		{
 			if (enemies[i].health > 0.0)
 			{
-				std::cout << i << " - " << enemies[i].name << " | " << "Health - " << enemies[i].health << std::endl;
+				std::cout << i << ". " << enemies[i].name << " // " << "HP " << enemies[i].health << std::endl;
 			}
 			else
 			{
-				std::cout << i << " - " << enemies[i].name << " | " << "Health - X" << std::endl;
+				std::cout << i << ". " << enemies[i].name << " // " << "HP 0" << std::endl;
 			}
 		}
 	}
@@ -200,6 +205,9 @@ void BattleManager::EnemiesAttackPlayer(Entity * player)
 				if (player->ReturnHealth() <= 0.0)
 				{
 					std::cout << "You have been slain!" << std::endl;
+					std::cout << "You retreat back to the safety of your home..." << std::endl;
+					player->SetState(States::Idle);
+					player->SetLocation(Locations::Home);
 					return;
 				}
 			}

@@ -28,7 +28,7 @@ public:
 	void CreateEnemy();
 	void PrintEnemies();
 	void Battle(Entity * player, int locationID);
-	void EnemiesToAttack();
+	void EnemiesToAttack(Entity * player);
 	void EnemiesAttackPlayer(Entity * player);
 	bool EnemiesAlive();
 	void EnemiesFormatted();
