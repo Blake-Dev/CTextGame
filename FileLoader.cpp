@@ -85,6 +85,8 @@ Entity* FileLoader::LoadSave()
 {
 	if (std::fstream("PlayerSave.txt"))
 	{
+		std::cout << "Save File Detected..." << std::endl;
+
 		std::ifstream infile("PlayerSave.txt");
 		std::ifstream heroDef("HeroDef.txt");
 		std::string ID, name, heroType, health, maxh, attack, maxa, magic, maxmag, mana, maxmana, IDCheck;
@@ -150,8 +152,9 @@ Entity* FileLoader::LoadSave()
 	}
 	else
 	{
-		CreateSave();
+		m_ent.push_back(CreateSave());
 	}
+	//std::cout << m_ent[0]->ReturnName();
 	return m_ent[0];
 }
 
@@ -320,6 +323,11 @@ Entity* FileLoader::CreateSave()
 	outfile << saveIndex << ',' << name;
 
 	std::cout << "File written to." << std::endl;
+
+	m_ent[0]->inventory.AddItem(CreateObject(100));
+	m_ent[0]->inventory.AddItem(CreateObject(200));
+
+	//m_ent[0]->inventory.ShowAllItems();
 
 	return m_ent[0];
 }

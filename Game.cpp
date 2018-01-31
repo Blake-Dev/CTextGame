@@ -13,10 +13,10 @@ void Game::LoadSave()
 	FileLoader file;
 
 	m_ent.push_back(file.LoadSave());
+	Save();
+	//m_ent[0]->inventory.ShowAllItems();
 	m_ent[0]->inventory.m_inventory = file.LoadPlayerItems();
 	SetLocation();
-
-	std::cout << "File save detected..." << std::endl << std::endl;
 
 	//m_ent[0]->PrintStats();
 
@@ -170,6 +170,7 @@ void Game::MainMenu()
 				//Set the player inventory
 				m_ent[0]->inventory.m_inventory = file.LoadPlayerItems();
 				SetLocation();
+
 				done = true;
 			}
 			break;
