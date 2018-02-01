@@ -18,7 +18,7 @@ void UIManager::Options()
 
 void UIManager::Menu(int location, const std::string & l)
 {
-	std::cout << "Location // " << l << std::endl;
+	std::cout << "Location //  " << l << std::endl;
 	std::cout << std::setfill('=') << std::setw(30) << '=' << std::setfill(' ') << std::endl;
 	switch (location)
 	{
@@ -27,7 +27,7 @@ void UIManager::Menu(int location, const std::string & l)
 		std::cout << std::left << std::setw(4) << "3 - " << std::setw(10) << std::right << "Rest " << std::setw(2) << "| " << std::setw(4) << std::left << "4 - " << std::setw(10) << std::right << "Stats" << std::endl;
 		break;
 	default:
-		std::cout << std::left << std::setw(4) << "1 - " << std::setw(10) << std::right << "Travel " << std::setw(2) << "| " << std::setw(4) << std::left << "2 - " << std::setw(10) << std::right << "Inventory" << std::endl;
+		std::cout << std::left << std::setw(4) << "1 - " << std::setw(10) << std::right << "Advance " << std::setw(2) << "| " << std::setw(4) << std::left << "2 - " << std::setw(10) << std::right << "Inventory" << std::endl;
 		std::cout << std::left << std::setw(4) << "3 - " << std::setw(10) << std::right << "Escape " << std::setw(2) << "| " << std::setw(4) << std::left << "4 - " << std::setw(10) << std::right << "Stats" << std::endl;
 		break;
 	}

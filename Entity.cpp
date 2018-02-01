@@ -188,7 +188,7 @@ void Entity::Travel()
 
 				if (ReturnDungeonLevel() >= 10)
 				{
-					state == States::Idle;
+					state = States::Idle;
 					location = Locations::Home;
 					ui.OutputText("You clear the dungeon triumphantly!");
 				}
@@ -347,7 +347,7 @@ void Entity::PrintEquipped()
 
 void Entity::Equip()
 {
-	int choice;
+	unsigned int choice;
 	int armorSlot;
 	bool exitEquip = false;
 

@@ -17,12 +17,8 @@ int main()
 {
 	Game game;
 	UIManager UI;
-	
 	int choice;
-
-	UI.OutputText("Good luck!");
-	_getch();
-
+	
 	while (game.Playing())
 	{
 		UI.Clear();

@@ -136,7 +136,7 @@ void Game::MainMenu()
 		switch (input)
 		{
 		case 1:
-			std::cout << "Starting game..." << std::endl;
+			std::cout << "Starting game..." << std::endl << "> ";
 			_getch();
 			system("cls");
 			done = true;

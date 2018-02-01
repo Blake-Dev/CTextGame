@@ -102,6 +102,7 @@ void BattleManager::Battle(Entity * player, int locationID)
 			ui.OutputText("Multiple enemies stand between you and the exit...\n\n");
 			PrintEnemies();
 		}
+		std::cout << "\n> ";
 		_getch();
 		system("cls");
 		int choice;
@@ -109,6 +110,12 @@ void BattleManager::Battle(Entity * player, int locationID)
 		battling = true;
 		while (battling)
 		{
+			if ((!EnemiesAlive()) || (player->ReturnHealth() <= 0))
+			{
+				battling = false;
+				player->SetState(States::Idle);
+			}
+
 			std::cout << player->ReturnName() << " // " << "ATK " << player->ReturnAttack() << "   HP " << player->ReturnHealth() << std::endl;
 			ui.BattleMenu();
 			std::cout << "\n**ENEMIES**\n" << std::endl;
@@ -116,65 +123,58 @@ void BattleManager::Battle(Entity * player, int locationID)
 			
 			std::cout << "\n" << "> ";
 			std::cin >> choice;
-			ui.Clear();
+			ui.Clear();			
+			
+			switch (choice)
+			{
+			case 1:
+				//Attack
+				int attackChoice;
+				EnemiesToAttack(player);
+				std::cout << "\n" << "> ";
+				std::cin >> attackChoice;
+				ui.Clear();
 
-			if ((!EnemiesAlive()) || (player->ReturnHealth() <= 0))
-			{
-				battling = false;
-				player->SetState(States::Idle);
-			}
-			else
-			{
-				switch (choice)
+				if (enemies[attackChoice].health > 0.0)
 				{
-				case 1:
-					//Attack
-					int attackChoice;
-					EnemiesToAttack(player);
-					std::cout << "\n" << "> ";
-					std::cin >> attackChoice;
-					ui.Clear();
-
-					if (enemies[attackChoice].health > 0.0)
+					std::cout << "You attack the " << enemies[attackChoice].name << " for " << player->ReturnAttack() << " damage!" << std::endl;
+					enemies[attackChoice].health -= player->ReturnAttack();
+					if (enemies[attackChoice].health <= 0.0)
 					{
-						std::cout << "You attack the " << enemies[attackChoice].name << " for " << player->ReturnAttack() << " damage!" << std::endl;
-						enemies[attackChoice].health -= player->ReturnAttack();
-						if (enemies[attackChoice].health <= 0.0)
-						{
-							ui.OutputText("You have slain the enemy!");
-							_getch();
-							ui.Clear();
-						}
-						if (!EnemiesAlive())
-						{
-							battling = false;
-							player->SetState(States::Idle);
-						}
+						ui.OutputText("You have slain the enemy!");
+						_getch();
+						ui.Clear();
 					}
-					else
-						ui.OutputText("You can't attack something that's dead!");
-
-					break;
-				case 2:
-					//Defend
-					ui.OutputText("You defend and stuff and things!");
-					break;
-				case 3:
-					//Heal
-					player->Heal();
-					break;
-				case 4:
-					//Use Item
-					ui.OutputText("Coming Soon");
-					break;
-				default:
-					std::cout << "Choice out of range!" << std::endl;
-					break;
+					if (!EnemiesAlive())
+					{
+						battling = false;
+						player->SetState(States::Idle);
+					}
 				}
-				battling = EnemiesAttackPlayer(player);
-				ui.OutputText("\n");
-				player->RechargeMana();
+				else
+					ui.OutputText("You can't attack something that's dead!");
+
+				break;
+			case 2:
+				//Defend
+				ui.OutputText("You defend and stuff and things!");
+				break;
+			case 3:
+				//Heal
+				player->Heal();
+				break;
+			case 4:
+				//Use Item
+				ui.OutputText("Coming Soon");
+				break;
+			default:
+				std::cout << "Choice out of range!" << std::endl;
+				break;
 			}
+			EnemiesAttackPlayer(player);
+			ui.OutputText("\n");
+			player->RechargeMana();
+			
 		}
 	}
 
@@ -201,7 +201,7 @@ void BattleManager::EnemiesToAttack(Entity * player)
 	}
 }
 
-bool BattleManager::EnemiesAttackPlayer(Entity * player)
+void BattleManager::EnemiesAttackPlayer(Entity * player)
 {
 	if (enemies.size() > 0)
 	{
@@ -215,15 +215,14 @@ bool BattleManager::EnemiesAttackPlayer(Entity * player)
 				if (player->ReturnHealth() <= 0.0)
 				{
 					std::cout << "You have been slain!" << std::endl;
-					std::cout << "You retreat back to the safety of your home..." << std::endl;
+					std::cout << "You retreat back to the safety of your home...";
 					player->SetState(States::Idle);
 					player->SetLocation(Locations::Home);
-					return false;
+					battling = false;
 				}
 			}
 		}
 	}
-	return true;
 }
 
 bool BattleManager::EnemiesAlive()
