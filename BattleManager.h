@@ -29,7 +29,7 @@ public:
 	void PrintEnemies();
 	void Battle(Entity * player, int locationID);
 	void EnemiesToAttack(Entity * player);
-	void EnemiesAttackPlayer(Entity * player);
+	bool EnemiesAttackPlayer(Entity * player);
 	bool EnemiesAlive();
 	void EnemiesFormatted();
 

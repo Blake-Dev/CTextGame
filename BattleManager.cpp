@@ -133,13 +133,23 @@ void BattleManager::Battle(Entity * player, int locationID)
 					EnemiesToAttack(player);
 					std::cout << "\n" << "> ";
 					std::cin >> attackChoice;
+					ui.Clear();
 
 					if (enemies[attackChoice].health > 0.0)
 					{
 						std::cout << "You attack the " << enemies[attackChoice].name << " for " << player->ReturnAttack() << " damage!" << std::endl;
 						enemies[attackChoice].health -= player->ReturnAttack();
 						if (enemies[attackChoice].health <= 0.0)
+						{
 							ui.OutputText("You have slain the enemy!");
+							_getch();
+							ui.Clear();
+						}
+						if (!EnemiesAlive())
+						{
+							battling = false;
+							player->SetState(States::Idle);
+						}
 					}
 					else
 						ui.OutputText("You can't attack something that's dead!");
@@ -161,7 +171,7 @@ void BattleManager::Battle(Entity * player, int locationID)
 					std::cout << "Choice out of range!" << std::endl;
 					break;
 				}
-				EnemiesAttackPlayer(player);
+				battling = EnemiesAttackPlayer(player);
 				ui.OutputText("\n");
 				player->RechargeMana();
 			}
@@ -191,7 +201,7 @@ void BattleManager::EnemiesToAttack(Entity * player)
 	}
 }
 
-void BattleManager::EnemiesAttackPlayer(Entity * player)
+bool BattleManager::EnemiesAttackPlayer(Entity * player)
 {
 	if (enemies.size() > 0)
 	{
@@ -208,11 +218,12 @@ void BattleManager::EnemiesAttackPlayer(Entity * player)
 					std::cout << "You retreat back to the safety of your home..." << std::endl;
 					player->SetState(States::Idle);
 					player->SetLocation(Locations::Home);
-					return;
+					return false;
 				}
 			}
 		}
 	}
+	return true;
 }
 
 bool BattleManager::EnemiesAlive()

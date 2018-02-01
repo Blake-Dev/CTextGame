@@ -132,72 +132,78 @@ void Entity::Travel()
 	UIManager ui;
 	int choice;
 
-	if (location == Locations::Home)
+	if (ReturnHealth() > 0)
 	{
-		ui.OutputText("Travel // Location - Home");
-		ui.OutputText("=========================");
-		ui.OutputText("1 - Small Dungeon");
-		ui.OutputText("2 - Large Dungeon");
-		ui.OutputText("3 - Abyss");
-		ui.OutputText("4 - Stay Put");
 
-		std::cout << "> ";
-		std::cin >> choice;
-		ui.Clear();
-
-		switch (choice)
+		if (location == Locations::Home)
 		{
-		case 1:
-			ui.OutputText("You make the trek to the Small Dungeon.\n\nThis shouldn't take too long.");
-			location = Locations::SmallDungeon;
-			SetDungeonLevel(1);
-			break;
-		case 2:
-			ui.OutputText("You begin the journey to the Large Dungeon.\n\nYou're met with warning signs and discarded weapons along the path.");
-			location = Locations::LargeDungeon;
-			SetDungeonLevel(1);
-			break;
-		case 3:
-			ui.OutputText("Despite the warnings of the townspeople, you begin the descent to the Abyss.\n\nAs you approach, an eerie voice draws you in.");
-			location = Locations::Abyss;
-			SetDungeonLevel(1);
-			break;
-		case 4:
-			ui.OutputText("You decide to stay home. You'll be ready soon enough.\n\nMaybe it would be wise to shop or train.");
-			location = Locations::Home;
-			break;
-		default:
-			ui.OutputText("Incorrect input.");
-			break;
-		}
-	}
-	else
-	{
-		std::cout << "Travel // Location - Level " << ReturnDungeonLevel() << std::endl;
-		ui.OutputText("=============================");
-		ui.OutputText("Advance to next room?\n\n1 - Yes\n2 - No");
-		std::cout << "> ";
-		std::cin >> choice;
-		if (choice == 1)
-		{
-			ui.OutputText("You press forward...");
-			IncrementDungeonLevel();
+			ui.OutputText("Travel // Location - Home");
+			ui.OutputText("=========================");
+			ui.OutputText("1 - Small Dungeon");
+			ui.OutputText("2 - Large Dungeon");
+			ui.OutputText("3 - Abyss");
+			ui.OutputText("4 - Stay Put");
 
-			if (ReturnDungeonLevel() >= 10)
+			std::cout << "> ";
+			std::cin >> choice;
+			ui.Clear();
+
+			switch (choice)
 			{
-				state == States::Idle;
+			case 1:
+				ui.OutputText("You make the trek to the Small Dungeon.\n\nThis shouldn't take too long.");
+				location = Locations::SmallDungeon;
+				SetDungeonLevel(1);
+				break;
+			case 2:
+				ui.OutputText("You begin the journey to the Large Dungeon.\n\nYou're met with warning signs and discarded weapons along the path.");
+				location = Locations::LargeDungeon;
+				SetDungeonLevel(1);
+				break;
+			case 3:
+				ui.OutputText("Despite the warnings of the townspeople, you begin the descent to the Abyss.\n\nAs you approach, an eerie voice draws you in.");
+				location = Locations::Abyss;
+				SetDungeonLevel(1);
+				break;
+			case 4:
+				ui.OutputText("You decide to stay home. You'll be ready soon enough.\n\nMaybe it would be wise to shop or train.");
 				location = Locations::Home;
-				ui.OutputText("You clear the dungeon triumphantly!");
+				break;
+			default:
+				ui.OutputText("Incorrect input.");
+				break;
 			}
-
-			state = States::Battle;
 		}
 		else
 		{
-			ui.OutputText("You stay and collect yourself.");
-			state = States::Idle;
+			std::cout << "Travel // Location - Level " << ReturnDungeonLevel() << std::endl;
+			ui.OutputText("=============================");
+			ui.OutputText("Advance to next room?\n\n1 - Yes\n2 - No");
+			std::cout << "> ";
+			std::cin >> choice;
+			if (choice == 1)
+			{
+				ui.OutputText("You press forward...");
+				IncrementDungeonLevel();
+
+				if (ReturnDungeonLevel() >= 10)
+				{
+					state == States::Idle;
+					location = Locations::Home;
+					ui.OutputText("You clear the dungeon triumphantly!");
+				}
+
+				state = States::Battle;
+			}
+			else
+			{
+				ui.OutputText("You stay and collect yourself.");
+				state = States::Idle;
+			}
 		}
-	}	
+	}
+	else
+		ui.OutputText("Your health is too low. You need to rest up before you leave!");
 }
 
 void Entity::ResetStats()
