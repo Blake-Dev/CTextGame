@@ -143,26 +143,27 @@ void Entity::Travel()
 
 		std::cout << "> ";
 		std::cin >> choice;
+		ui.Clear();
 
 		switch (choice)
 		{
 		case 1:
-			ui.OutputText("You make the trek to the Small Dungeon.");
+			ui.OutputText("You make the trek to the Small Dungeon.\n\nThis shouldn't take too long.");
 			location = Locations::SmallDungeon;
-			SetDungeonLevel(0);
+			SetDungeonLevel(1);
 			break;
 		case 2:
-			ui.OutputText("You make the trek to the Large Dungeon.");
+			ui.OutputText("You begin the journey to the Large Dungeon.\n\nYou're met with warning signs and discarded weapons along the path.");
 			location = Locations::LargeDungeon;
-			SetDungeonLevel(0);
+			SetDungeonLevel(1);
 			break;
 		case 3:
-			ui.OutputText("You make the trek to the Abyss...");
+			ui.OutputText("Despite the warnings of the townspeople, you begin the descent to the Abyss.\n\nAs you approach, an eerie voice draws you in.");
 			location = Locations::Abyss;
-			SetDungeonLevel(0);
+			SetDungeonLevel(1);
 			break;
 		case 4:
-			ui.OutputText("You decide to stay home. You'll be ready soon enough");
+			ui.OutputText("You decide to stay home. You'll be ready soon enough.\n\nMaybe it would be wise to shop or train.");
 			location = Locations::Home;
 			break;
 		default:
@@ -346,7 +347,8 @@ void Entity::Equip()
 
 	while (!exitEquip)
 	{
-		std::cout << "-1 to exit" << std::endl;
+		std::cout << "Inventory // Equip" << std::endl;
+		std::cout << "-1 to exit" << std::endl << std::endl;
 		inventory.EquipShowItems();
 		std::cin >> choice;
 

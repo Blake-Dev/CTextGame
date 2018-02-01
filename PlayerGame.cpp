@@ -20,7 +20,7 @@ int main()
 	
 	int choice;
 
-	UI.OutputText("Throughout this game, you will be shown a screen with a '> ' followed by a blinking cursor.\nThis means press any key to continue.\nGood luck!\n");
+	UI.OutputText("Good luck!");
 	_getch();
 
 	while (game.Playing())

@@ -111,7 +111,7 @@ void BattleManager::Battle(Entity * player, int locationID)
 		{
 			std::cout << player->ReturnName() << " // " << "ATK " << player->ReturnAttack() << "   HP " << player->ReturnHealth() << std::endl;
 			ui.BattleMenu();
-			std::cout << "\n -------\n<ENEMIES>\n -------\n" << std::endl;
+			std::cout << "\n**ENEMIES**\n" << std::endl;
 			PrintEnemies();
 			
 			std::cout << "\n" << "> ";

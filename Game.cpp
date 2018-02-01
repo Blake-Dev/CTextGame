@@ -93,7 +93,7 @@ void Game::ProcessInput(int state, int choice)
 			break;
 		case 2:
 			//Inventory
-			m_ent[0]->inventory.ShowAllItems();
+			m_ent[0]->inventory.ShowAllItemsClean();
 			break;
 		case 3:
 			//Escape
@@ -132,10 +132,13 @@ void Game::MainMenu()
 	{
 		std::cout << "> ";
 		std::cin >> input;
+		system("cls");
 		switch (input)
 		{
 		case 1:
 			std::cout << "Starting game..." << std::endl;
+			_getch();
+			system("cls");
 			done = true;
 			break;
 		case 2:

@@ -93,8 +93,10 @@ void Inventory::EquipShowItems()
 	{
 		for (unsigned int i = 0; i < m_inventory.size(); i++)
 		{
-			std::cout << i << " - " << m_inventory[i]->ReturnName() << std::endl;
-			std::cout << "Stat - " << m_inventory[i]->ReturnStat() << " | Val " << m_inventory[i]->ReturnValue() << std::endl;
+			std::cout << i << ". " << m_inventory[i]->ReturnName() << std::endl;
+			if(i < m_inventory.size() - 1)
+				std::cout << "//" << std::endl;
+			//std::cout << "Stat - " << m_inventory[i]->ReturnStat() << " | Val " << m_inventory[i]->ReturnValue() << std::endl;
 		}
 	}
 }
